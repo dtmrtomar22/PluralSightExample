@@ -1,0 +1,20 @@
+[
+    {
+      "productid": 1,
+      "productName" : "Hammer",
+      "productPrice" : 200,
+      "releaseDate" : "29/09/2019",
+      "description" : "testing item",
+      "starRating"  : 3.2,
+      "imageURL" : "assets/hammer-png-icon-15.png"
+    },
+    {
+      "productid": 2,
+      "productName" : "Drill Machine",
+      "productPrice" : 400,
+      "releaseDate" : "30/09/2019",
+      "description" : "testing item",
+      "starRating"  : 4.2,
+      "imageURL" : "assets/71v8JThSIHL._SL1500_.jpg"
+    }
+  ]

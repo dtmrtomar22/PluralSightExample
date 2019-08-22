@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IProduct, Product } from '../IProduct';
+import { ProductSerice } from './product.service';
 
 @Component({
   selector: 'pm-products',
@@ -7,29 +9,49 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsListComponent implements OnInit {
   pageTitle:string = "product list";
-  products:any[] = [
-    {
-      "productid": 1,
-      "productName" : "ABC",
-      "productPrice" : 200,
-      "releaseDate" : "29/09/2019",
-      "description" : "testing item",
-      "starRating"  : 3.2,
-      "imageURL" : ""
-    },
-    {
-      "productid": 2,
-      "productName" : "xyz",
-      "productPrice" : 400,
-      "releaseDate" : "30/09/2019",
-      "description" : "testing item",
-      "starRating"  : 4.2,
-      "imageURL" : ""
-    }
-  ];
-  constructor() { }
+  imageWidth:number = 50;
+  imageMargin:number =2;
+  showImage:boolean = false;
+  //listFilter:string = 'Hammer';
+  filteredProduct : IProduct[];
+  _listFilter:string;
+  errMessage :string;
+  get listFilter():string{    
+    return this._listFilter;
+  }
+  set listFilter(value:string){    
+    this._listFilter = value;
+    this.filteredProduct = this.listFilter?this.performFilter(this.listFilter):this.products;
+  }
+  products:IProduct[] = [];
+  toggelImage():void{
+    this.showImage = !this.showImage;
+  }
+  constructor(private productService :ProductSerice) { 
+    
+    //this.listFilter = "Hammer";
+  }
 
-  ngOnInit() {
+  performFilter(filterBy:string):IProduct[]{
+    filterBy = filterBy.toLocaleLowerCase();
+    console.log(filterBy);
+    return this.products.filter((product: IProduct) =>
+        product.productName.toLocaleLowerCase().indexOf(filterBy)!==-1);
+  }
+
+  onRatingClicked(message:string) : void{
+    this.pageTitle = 'Product List: ' + message;
+  }
+  ngOnInit() { 
+    // this.products = this.productService.getProducts();
+    // this.filteredProduct = this.products;
+    this.productService.getProducts().subscribe({
+      next: products => {this.products = products
+      this.filteredProduct = this.products;
+    },
+      error: err=> this.errMessage = err,
+      
+    });
   }
 
 }

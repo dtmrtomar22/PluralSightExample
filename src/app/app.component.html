@@ -9,7 +9,15 @@
   
     <ul class="nav navbar-nav">
       <li><a class="nav-link" [routerLink]="['/welcome']">Home</a></li>
-      <li><a class="nav-link" [routerLink]="['/products']">Product List</a></li>
+      <li><a class="nav-link" [routerLink]="['/products']" *ngIf="securityobject.canAccessProducts" >Product List</a></li>      
+    </ul>
+    <ul class="nav navbar-nav navbar-right"> 
+      <li><a class="nav-link" [routerLink]="['/Login']" *ngIf="!securityobject.isAuthenticated">Login</a>
+        <a href="#" (onclick)="logout()"
+          *ngIf="securityobject.isAuthenticated">
+          logout {{securityobject.userName}}
+        </a>
+      </li>
     </ul>
 </a>
 </nav>

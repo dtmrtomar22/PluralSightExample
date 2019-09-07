@@ -11,7 +11,10 @@ import { ProductDetailComponent } from './products/product-detail.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { RouterModule } from '@angular/router';
 import { PagenotfoundComponent } from './welcome/pagenotfound.component';
-
+import { ProductdetailgaurdGuard } from './productdetailgaurd.guard';
+import {SecurityService} from './Security/security.service';
+import { LoginComponent } from './security/login.component';
+import { AuthGuard } from './Security/auth.guard';
 @NgModule({
   declarations: [    
     AppComponent,
@@ -20,7 +23,8 @@ import { PagenotfoundComponent } from './welcome/pagenotfound.component';
     convertTospacesPipe,
     ProductDetailComponent,
     WelcomeComponent,
-    PagenotfoundComponent
+    PagenotfoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -28,8 +32,9 @@ import { PagenotfoundComponent } from './welcome/pagenotfound.component';
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      {path:'products' , component: ProductsListComponent},
-      {path:'products/:id' , component:ProductDetailComponent},
+      {path:'products' , component: ProductsListComponent, canActivate:[AuthGuard],data:{claimType:'canAccessProducts'}},
+      {path:'Login' , component: LoginComponent},
+      {path:'products/:id' , canActivate:[ProductdetailgaurdGuard], component:ProductDetailComponent},
       {path:'welcome' , component:WelcomeComponent},
       {path:'' ,redirectTo : 'welcome' ,pathMatch: 'full'},
       {path:'**' ,component : PagenotfoundComponent }

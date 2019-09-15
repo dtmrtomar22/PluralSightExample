@@ -21,10 +21,9 @@
                         <th>
                             <button class="btn btn-primary" (click)="toggelImage()" >{{showImage ?'Hide': 'Show'}} Image</button>
                         </th>
-                        <th>product</th>
-                        <th>code</th>
-                        <th>available</th>
+                        <th>product</th>                       
                         <th>price</th>
+                        <th>release date</th>
                         <th>5 star rating</th>
                         <th>Action</th>
                     </tr>
@@ -32,19 +31,19 @@
                 <tbody>
                     <tr *ngFor = 'let product of filteredProduct'>
                         <td><img *ngIf = 'showImage'  
-                                src={{product.imageURL}} 
-                                title="{{product.productName}}"
+                                src={{product.Url}} 
+                                title="{{product.ProductName}}"
                                 [style.width.px]='imageWidth'
                                 [style.margin.px]='imageMargin'></td>
-                        <td><a [routerLink]="['/products',product.productid]">{{product.productName | uppercase | convertTospaces:'M'}}</a></td>
-                        <td>{{product.productid}}</td>
-                        <td>{{product.releaseDate}}</td>
-                        <td>{{product.productPrice | currency:'USD':'symbol':'1.2-2'}}</td>
+                        <td><a [routerLink]="['/products',product.ProductId]">{{product.ProductName | uppercase | convertTospaces:'M'}}</a></td>
+                        <td>{{product.Price | currency:'USD':'symbol':'1.2-2'}}</td>
+                        <td>{{product.IntroductionDate}}</td>
+                        
                         <td><pm-star [rating] = 'product.starRating' 
                                      (ratingClicked) = 'onRatingClicked($event)'   ></pm-star></td>
                         <td>
-                                     <button type="button" value="Update" class="btn btn-default" (click)='editProduct(product.productid, product)'>Update</button>  
-                                     <button type="button" value="Delete" class="btn btn-danger" (click)='deleteProduct(product.productid)'>Delete</button>  
+                                     <button type="button" value="Update" class="btn btn-default" (click)='editProduct(product.ProductId, product)'>Update</button>  
+                                     <button type="button" value="Delete" class="btn btn-danger" (click)='deleteProduct(product.ProductId)'>Delete</button>  
                         </td>
                     </tr>
                 </tbody>

@@ -6,10 +6,12 @@ import { Observable, of } from 'rxjs';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 
-const API_URL = "";
+const API_URL = "http://localhost:34362/";
 const httpOptions ={
   headers : new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'grant_type':'password',
+    'No-Auth':'True'
   })
 }
 
@@ -18,6 +20,7 @@ const httpOptions ={
 })
 export class SecurityService {
   securityObject : AppUserAuth = new AppUserAuth();  
+  userclaim:string= "";
   constructor(private http: HttpClient) { }
   login(entity:AppUser):Observable<AppUserAuth>{
     this.resetSecurityObject();
@@ -26,13 +29,17 @@ export class SecurityService {
     //                   entity.userName.toLowerCase()))
     //   if(this.securityObject.userName !==""){
     //     localStorage.setItem("bearerToken", this.securityObject.bearerToken);
-    //   }
-
-      return this.http.post<AppUserAuth>(API_URL+"login",entity,httpOptions).pipe(
-        tap(resp=>{Object.assign(this.securityObject,resp); 
-        localStorage.setItem("bearerToken",this.securityObject.bearerToken);
-        })
-      )
+    //   }      
+      var userData = "username=" + entity.userName + "&password=" + entity.password + "&grant_type=password";
+      const config = new HttpHeaders().set('Content-Type', 'application/json')
+                                .set('Accept', 'application/json')
+       return this.http.post<AppUserAuth>(API_URL+"oauth/token",userData,{ headers: config }).pipe(
+        tap(resp=>{Object.assign(this.securityObject,resp);        
+          alert("alert" +  JSON.stringify(this.securityObject));            
+          localStorage.setItem("bearerToken",this.securityObject.access_token);     
+          //alert("alert" +  localStorage.getItem("bearerToken"));
+        }));
+      
       return of<AppUserAuth>(this.securityObject);
   }
   logout():void{
@@ -41,7 +48,7 @@ export class SecurityService {
   resetSecurityObject():void{
     this.securityObject.userName ="";
     this.securityObject.bearerToken ="";
-    this.securityObject.canAccessProduct = false,
+    this.securityObject.canAccessProducts = false,
     this.securityObject.canAccessCategory = false,
     this.securityObject.canAddCategory= false,
     this.securityObject.canAddProducts = false,

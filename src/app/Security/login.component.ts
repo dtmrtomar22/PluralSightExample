@@ -20,18 +20,23 @@ export class LoginComponent implements OnInit {
       private route : ActivatedRoute,
       private router : Router) {}
 
-  login(){
+    ngOnInit() {
+        this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    }
+
+    login(){          
     this.securityservice.login(this.user).subscribe(
-      resp => {this.securityObject = resp;
-      if(this.returnUrl){
+      resp => {this.securityObject = resp;                
+      if(this.returnUrl){                 
         this.router.navigateByUrl(this.returnUrl);
+      }
+      else{
+        this.router.navigateByUrl("/products");
       }
       },
       ()=>{this.securityObject = new AppUserAuth();}
     );
   }
-  ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-  }
+ 
 
 }

@@ -3,9 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Rout
 import { Observable } from 'rxjs';
 import { SecurityService } from './security.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class AuthGuard implements CanActivate  {
   constructor(private securityservice : SecurityService,
       private router: Router){}
@@ -13,16 +11,27 @@ export class AuthGuard implements CanActivate  {
     route: ActivatedRouteSnapshot, 
     state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
       let claimType:string = route.data["claimType"];
-      if (this.securityservice.securityObject.isAuthenticated &&
-        this.securityservice.securityObject[claimType]){
-          return true;
-        }
-       else{
-         this.router.navigate(['login'],
-         {queryParams : {retunUrl:state.url}}
+      // alert("Auth Gaurd "+JSON.stringify(this.securityservice.securityObject));
+      // alert(claimType);
+      // if (this.securityservice.securityObject.isAuthenticated &&
+      //   this.securityservice.securityObject[claimType]){
+      //     alert("auth gaurd true");
+      //     return true;
+      //   }
+      //  else{
+      //    this.router.navigate(['Login'],
+      //    {queryParams : {returnUrl:state.url}}
+      //    )
+      //  }
+      if(localStorage.getItem("bearerToken")){
+        return true;
+      }
+      else
+      {
+        this.router.navigate(['Login'],
+         {queryParams : {returnUrl:state.url}}
          )
-       }
-
+      }
       
     } 
 } 

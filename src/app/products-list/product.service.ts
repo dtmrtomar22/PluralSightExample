@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
 import { IProduct, Product } from '../IProduct';
-import{HttpClient, HttpErrorResponse} from '@angular/common/http';
+import{HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import{catchError,tap, map} from 'rxjs/operators';
+import { SecurityService } from '../Security/security.service';
 
 
 @Injectable({
     providedIn:"root"
 })
 export class ProductSerice{
-  httpUrl:string ='api/products/products.json';
+  httpUrl:string = 'http://localhost:34362/api/Product'; //'api/products/products.json';
+  
   constructor(private http:HttpClient){
 
   }
 
   getProducts(): Observable<IProduct[]>{
+    // let httpOptions = new HttpHeaders()
+    //   .set('Authorization','Bearer '+localStorage.getItem("bearerToken"))
+    // return this.http.get<IProduct[]>(this.httpUrl,{headers:httpOptions}).pipe(
     return this.http.get<IProduct[]>(this.httpUrl).pipe(
       tap(data=>console.log('All: ' + JSON.stringify(data))),catchError(this.handleError)
     );
@@ -22,9 +27,16 @@ export class ProductSerice{
   
   getProduct(id: number): Observable<IProduct | undefined> {
     return this.getProducts().pipe(
-      map((products: IProduct[]) => products.find(p => p.productid === id))
+      map((products: IProduct[]) => products.find(p => p.ProductId === id))
     );
   }
+
+  deleteProduct(id: string):Observable<string>{
+    // let httpOptions = new HttpHeaders()
+    //   .set('Authorization','Bearer '+localStorage.getItem("bearerToken"))
+      return this.http.delete<string>(this.httpUrl+"/"+id);
+  }
+
   private handleError(err:HttpErrorResponse){
       let errMessage= '';
       if(err.error instanceof ErrorEvent){

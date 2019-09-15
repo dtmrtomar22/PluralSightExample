@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppUserAuth } from './Security/app-user-auth';
 import { SecurityService } from './Security/security.service';
 
@@ -12,10 +12,13 @@ export class AppComponent {
   pageTitle:string = 'Acme Product Management';
   
   constructor(private securityservice:SecurityService) {   
+    
     this.securityObject = securityservice.securityObject;
+    alert("ngonint" +JSON.stringify(this.securityservice.securityObject));    
   }
-
+  
   logout():void{
     this.securityservice.logout();
   }
+ 
 }

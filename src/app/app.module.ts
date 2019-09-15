@@ -12,9 +12,12 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { RouterModule } from '@angular/router';
 import { PagenotfoundComponent } from './welcome/pagenotfound.component';
 import { ProductdetailgaurdGuard } from './productdetailgaurd.guard';
-import {SecurityService} from './Security/security.service';
+
 import { LoginComponent } from './security/login.component';
 import { AuthGuard } from './Security/auth.guard';
+import { ProductSerice } from './products-list/product.service';
+import { HttpInterceptorModule } from './Security/http-interceptor';
+
 @NgModule({
   declarations: [    
     AppComponent,
@@ -31,16 +34,17 @@ import { AuthGuard } from './Security/auth.guard';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    HttpInterceptorModule,
     RouterModule.forRoot([
       {path:'products' , component: ProductsListComponent, canActivate:[AuthGuard],data:{claimType:'canAccessProducts'}},
       {path:'Login' , component: LoginComponent},
       {path:'products/:id' , canActivate:[ProductdetailgaurdGuard], component:ProductDetailComponent},
       {path:'welcome' , component:WelcomeComponent},
-      {path:'' ,redirectTo : 'welcome' ,pathMatch: 'full'},
+      {path:'' ,redirectTo : 'Login' ,pathMatch: 'full'},
       {path:'**' ,component : PagenotfoundComponent }
     ])
   ],
-  providers: [],
+  providers: [AuthGuard,ProductSerice],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

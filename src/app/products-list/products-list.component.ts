@@ -12,6 +12,7 @@ export class ProductsListComponent implements OnInit {
   imageWidth:number = 50;
   imageMargin:number =2;
   showImage:boolean = false;
+  deleteMessage:string;
   //listFilter:string = 'Hammer';
   filteredProduct : IProduct[];
   _listFilter:string;
@@ -36,7 +37,7 @@ export class ProductsListComponent implements OnInit {
     filterBy = filterBy.toLocaleLowerCase();
     console.log(filterBy);
     return this.products.filter((product: IProduct) =>
-        product.productName.toLocaleLowerCase().indexOf(filterBy)!==-1);
+        product.ProductName.toLocaleLowerCase().indexOf(filterBy)!==-1);
   }
 
   onRatingClicked(message:string) : void{
@@ -53,5 +54,13 @@ export class ProductsListComponent implements OnInit {
       
     });
   }
-
+  deleteProduct(productId:string):void{
+    alert(productId);
+    this.productService.deleteProduct(productId).subscribe({
+      next: products => {this.deleteMessage = products
+        this.filteredProduct = this.products;
+      },
+        error: err=> this.errMessage = err,
+      });
+  }
 }
